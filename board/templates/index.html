@@ -1,10 +1,79 @@
-<!DOCTYPE html>
-<html lang="ja">
-    <head>
-        <meta charset="utf-8">
-        <title>トップページ</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}学内掲示板 - トップページ{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block keijiban %}
+<h2>掲示板トップページ</h2>
+<h3>掲示板一覧</h3>
+{% endblock %}
+
+{% block nav %}
+<nav class="globalnav">
+    <ul>
+        <li class="navItem"><a href="#" title="教務課">教務課</a></li>
+        <li class="navItem"><a href="#" title="学生支援担当">学生支援担当</a></li>
+        <li class="navItem"><a href="#" title="学生課">学生課</a></li>
+        <li class="navItem"><a href="#" title="学友会">学友会</a></li>
+        <li class="navItem"><a href="#" title="アルバイト">アルバイト</a></li>
+    </ul>
+</nav>
+{% endblock %}
+
+{% block contents %}
+<h3>掲示物一覧</h3>
+    {% for post in post_list %}
+    <div class="post-preview">
+        <a href="{% url 'board:post_detail' post.pk %}">
+            {% if post.post_photo %}
+                <img src="{{ post.post_photo.url }}" width="200" height="200"/>
+            {% endif %}
+            <h2 class="post-title">
+                {{ post.post_title }}
+            </h2>
+            <h3 class="post-overview">
+                {{ post.post_overview|truncatechars:20 }}
+            </h3>
+        </a>
+        <p class="post-started-at">{{ post.started_at }}</p>
+    </div>
+    {% empty %}
+    <p>投稿がありません。</p>
+    {% endfor %}
+    
+    <!-- ページネーション処理 -->
+    {% if is_paginated %}
+    <ul class="pagination">
+        <!-- 前ページへのリンク -->
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+        
+        <!-- ページ数表示 -->
+        {% for page_num in page_obj.paginator.page_range %}
+            {% if page_obj.number == page_num %}
+            <li class="page-item active"><a class="page-link" href="#">{{ page_num }}</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a></li>
+            {% endif %}
+        {% endfor %}
+        
+        <!-- 次ページへのリンク -->
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+{% endblock %}
