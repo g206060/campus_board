@@ -1,5 +1,7 @@
 from django.db import models
 
+import os
+
 class Board(models.Model):
     """掲示板モデル"""
     board_name = models.CharField(verbose_name='掲示板名', max_length=256)
@@ -18,3 +20,6 @@ class Post(models.Model):
 	post_upload = models.FileField(verbose_name='ファイル', upload_to='file/%y/%m/%d', null=True, blank=True)
 	def __str__(self):
 		return self.post_title
+		
+	def file_name(self):
+		return os.path.basename(self.post_upload.name)

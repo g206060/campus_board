@@ -51,3 +51,11 @@ LOGGING = {
 
 # Media 設定
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]

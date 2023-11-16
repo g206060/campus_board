@@ -5,6 +5,10 @@
 {% block title %}学内掲示板 - トップページ{% endblock %}
 
 {% block header %}
+<header>
+    <a href="{% url 'account_login' %}" class="btn btn-primary btn-xl rounded-pill mt-5">LOG IN</a>
+    <a class="btn btn-primary float-right" href="{% url 'board:post_create' %}">新規作成</a>
+</header>
 {% endblock %}
 
 {% block keijiban %}
@@ -28,6 +32,7 @@
 <h3>掲示物一覧</h3>
     {% for post in post_list %}
     <div class="post-preview">
+        <hr>
         <a href="{% url 'board:post_detail' post.pk %}">
             {% if post.post_photo %}
                 <img src="{{ post.post_photo.url }}" width="200" height="200"/>
@@ -44,6 +49,8 @@
     {% empty %}
     <p>投稿がありません。</p>
     {% endfor %}
+    
+    <hr>
     
     <!-- ページネーション処理 -->
     {% if is_paginated %}
